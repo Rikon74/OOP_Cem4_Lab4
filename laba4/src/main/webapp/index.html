@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список ноутбуков</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #800080;
+        }
+        .btn-secondary {
+            background-color: #800020;
+            border-color: #800020;
+        }
+        .btn-secondary:hover {
+            background-color: #b3002d;
+            border-color: #b3002d;
+        }
+        .form-label {
+            color: #800080;
+        }
+        .form-control {
+            border: 1px solid #800080;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="text-center">Добавить ноутбук</h1>
+    <form id="laptopsForm">
+        <div class="mb-3">
+            <label for="fabrick" class="form-label">Фирма:</label>
+            <input type="text" class="form-control" id="fabrick" name="fabrick" required>
+        </div>
+        <div class="mb-3">
+            <label for="model" class="form-label">Модель:</label>
+            <input type="text" class="form-control" id="model" name="model" required>
+        </div>
+        <div class="mb-3">
+            <label for="cpu" class="form-label">CPU:</label>
+            <input type="text" class="form-control" id="cpu" name="cpu" required>
+        </div>
+        <div class="mb-3">
+            <label for="ram" class="form-label">RAM:</label>
+            <input type="text" class="form-control" id="ram" name="ram" required>
+        </div>
+        <div class="mb-3">
+            <label for="hdd" class="form-label">HDD:</label>
+            <input type="text" class="form-control" id="hdd" name="hdd" required>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-secondary btn-bottom">Добавить ноутбук</button>
+        </div>
+    </form>
+
+    <div class="text-center mt-3">
+        <form action="laptopList.html">
+            <button type="submit" class="btn btn-secondary btn-bottom">Посмотреть список ноутбуков</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('laptopsForm');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const laptop = {};
+            formData.forEach(function (value, key) {
+                laptop[key] = value;
+            });
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:8080/laba4/laptop', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    console.log('Данные успешно отправлены');
+                } else {
+                    console.error('Произошла ошибка при обработке запроса:', xhr.statusText);
+                }
+            };
+
+            xhr.send(JSON.stringify(laptop));
+            form.reset();
+        });
+    });
+</script>
+
+</body>
+</html>
